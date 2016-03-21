@@ -11,7 +11,7 @@
 			<label for="login">Login:</label>
 			<input type="text" id="login" name="login" /><br><br>
 			<label for="senha">Senha:</label>
-			<input type="password" id="senha" name="senha" /><br><br>
+			<input type="text" id="senha" name="senha" /><br><br>
 			<button type="submit">Entrar</button>
 		</form>
 	</body>

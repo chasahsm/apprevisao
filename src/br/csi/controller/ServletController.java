@@ -1,11 +1,17 @@
 package br.csi.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import br.csi.model.usuario;
+import br.csi.model.dao.usuarioDAO;
 
 /**
  * Servlet implementation class ServletController
@@ -27,7 +33,35 @@ public class ServletController extends HttpServlet {
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("Chamou servlet controller");
+		String login = request.getParameter("login");
+		String senha = request.getParameter("senha");
+		
+		usuario u = new usuario();
+		u.setLogin(login);
+		u.setSenha(senha);
+		
+		usuarioDAO ud = new usuarioDAO();
+		RequestDispatcher dispatcher;
+		
+		try {
+			boolean retorno = ud.autenticado(u);
+			if(retorno){
+				String pagina = "/principal.jsp";
+				dispatcher = getServletContext().getRequestDispatcher(pagina);
+				dispatcher.forward(request, response);
+			}else{
+				String pagina = "/index.jsp";
+				dispatcher = getServletContext().getRequestDispatcher(pagina);
+				dispatcher.forward(request, response);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			
+			String pagina = "/index.jsp";
+			dispatcher = getServletContext().getRequestDispatcher(pagina);
+			dispatcher.forward(request, response);
+		}
 		
 	}
 
