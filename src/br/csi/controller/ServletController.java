@@ -46,11 +46,13 @@ public class ServletController extends HttpServlet {
 		try {
 			boolean retorno = ud.autenticado(u);
 			if(retorno){
-				String pagina = "/principal.jsp";
+				String pagina = "/principal.jsp";// op pra esconder jsp "WEB-INF/jsp/principal.jsp";
+				request.setAttribute("usuario", u);
 				dispatcher = getServletContext().getRequestDispatcher(pagina);
 				dispatcher.forward(request, response);
 			}else{
 				String pagina = "/index.jsp";
+				request.setAttribute("msg", "Login/Senha Inválidos");
 				dispatcher = getServletContext().getRequestDispatcher(pagina);
 				dispatcher.forward(request, response);
 			}
@@ -62,6 +64,28 @@ public class ServletController extends HttpServlet {
 			dispatcher = getServletContext().getRequestDispatcher(pagina);
 			dispatcher.forward(request, response);
 		}
+		/*if{//teste do botao CADASTRAR
+            String login = request.getParameter("login");//extrai informacao digitada no campo login
+            String senha = request.getParameter("senha");//extrai informacao digitada no campo senha
+            
+            usuarioDAO udao = new usuarioDAO();//objeto usuarioDAO
+            try{
+                boolean autenticado = udao.cadastrarUsuario(login, senha);
+                
+                if(autenticado == true){
+                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");//manda request do botao ENTRAR para INDEX.JSP
+                rd.forward(request, response);
+                out.println("<script>alert('Usuário cadastrado com sucesso!');location='principal.jsp';</script>");
+                }
+                else{
+                RequestDispatcher rd = request.getRequestDispatcher("erro.jsp");//manda request do botao ENTRAR para ERRO.JSP
+                rd.forward(request, response);
+                System.out.println("Cadastro não realizado!!");
+                }
+            }catch(Exception e){
+                e.printStackTrace();//MOSTRA NO LOG O ERRO
+            }
+        }*/
 		
 	}
 

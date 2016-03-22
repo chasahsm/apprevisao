@@ -1,6 +1,7 @@
 package br.csi.model.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,11 +30,15 @@ public class usuarioDAO {
 		boolean autenticado = false;
 		
 		Connection c = conectaBD.getConexao();
-		Statement stmt = c.createStatement();
+		//Statement stmt = c.createStatement();
+		//String sql = "select * from usuario where login = '"+u.getLogin()+"' and senha = '"+u.getSenha()+"';";
+		//ResultSet rs = stmt.executeQuery(sql);//retorna valor
 		
-		String sql = "select * from usuario where login = '"+u.getLogin()+"' and senha = '"+u.getSenha()+"';";
-		
-		ResultSet rs = stmt.executeQuery(sql);//retorna valor
+		String sql = "select * from usuario where login=? and senha=?";// p/impedir sql injection
+		PreparedStatement stmtPre = c.prepareStatement(sql);
+		stmtPre.setString(1, u.getLogin());
+		stmtPre.setString(2, u.getSenha());
+		ResultSet rs= stmtPre.executeQuery();
 		
 		while(rs.next()){
 			long id = rs.getLong("id");
@@ -44,4 +49,16 @@ public class usuarioDAO {
 		
 		return autenticado;
 	}
+	/*public boolean cadastrarUsuario(String l, String s) throws Exception{
+        conectaBD bd = new conectaBD();
+        Statement stmt = bd.getConexao().createStatement();//COMO SE FOSSE A TELA DO PGADMIN
+        
+        int retorno  = stmt.executeUpdate("INSERT INTO USUARIO (LOGIN, SENHA) VALUES ('" + l + "','"+ s +"')");
+        if(retorno > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }*/
 }
